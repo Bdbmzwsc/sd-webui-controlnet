@@ -38,7 +38,7 @@ def install_requirements(req_file):
                     installed_version = get_installed_version(package_name)
                     if installed_version != package_version:
                         launch.run_pip(
-                            f"install -U {package}",
+                            f"install -U {package} --user",
                             f"sd-webui-controlnet requirement: changing {package_name} version from {installed_version} to {package_version}",
                         )
                 elif ">=" in package:
@@ -48,7 +48,7 @@ def install_requirements(req_file):
                         installed_version
                     ) < comparable_version(package_version):
                         launch.run_pip(
-                            f"install -U {package}",
+                            f"install -U {package} --user",
                             f"sd-webui-controlnet requirement: changing {package_name} version from {installed_version} to {package_version}",
                         )
                 elif "<=" in package:
@@ -58,12 +58,12 @@ def install_requirements(req_file):
                         installed_version
                     ) > comparable_version(package_version):
                         launch.run_pip(
-                            f"install {package_name}=={package_version}",
+                            f"install {package_name}=={package_version} --user",
                             f"sd-webui-controlnet requirement: changing {package_name} version from {installed_version} to {package_version}",
                         )
                 elif not launch.is_installed(extract_base_package(package)):
                     launch.run_pip(
-                        f"install {package}",
+                        f"install {package} --user",
                         f"sd-webui-controlnet requirement: {package}",
                     )
             except Exception as e:
@@ -82,7 +82,7 @@ def install_onnxruntime():
         import torch.cuda as cuda # torch import head to improve loading time
         onnxruntime = 'onnxruntime-gpu' if cuda.is_available() else 'onnxruntime'
         launch.run_pip(
-            f'install {onnxruntime}',
+            f'install {onnxruntime} --user',
             f"sd-webui-controlnet requirement: {onnxruntime}",
         )
 
@@ -99,7 +99,7 @@ def try_install_from_wheel(pkg_name: str, wheel_url: str, version: Optional[str]
 
     try:
         launch.run_pip(
-            f"install -U {wheel_url}",
+            f"install -U {wheel_url} --user",
             f"sd-webui-controlnet requirement: {pkg_name}",
         )
     except Exception as e:
@@ -128,7 +128,7 @@ def try_install_insight_face():
     ):
         try:
             launch.run_pip(
-                f"install {wheel_url}",
+                f"install {wheel_url} --user",
                 "sd-webui-controlnet requirement: insightface",
             )
         except Exception as e:
